@@ -12,15 +12,12 @@ DO NOT CHANGE
 public class SearcherImpl implements Searcher {
     public List<Integer> search(String keyPhrase, Map<String, List<List<Integer>>> index) {
         List<Integer> result = new ArrayList<>();
-
-
         if (keyPhrase.equals("")) {
             return result;
         }
         keyPhrase = keyPhrase.trim();
         String[] words = keyPhrase.split("\\s+");
         List<List<Integer>> list = new ArrayList<>();
-
 
         //nested for loops for adding all docs which contain at least one of the user entered search words
         for (int userWord = 0; userWord < words.length; userWord++) {
@@ -53,14 +50,12 @@ public class SearcherImpl implements Searcher {
         if (commonDocs.isEmpty()) {
             return result;
         }
-        //verify word positions in documents.
 
         //put word positions from index into hashtable where documents from commonDocs are the keys
         Map<Integer, List<List<Integer>>> wordPositions = new HashMap<>();
         for (int i = 0; i < commonDocs.size(); i++) {
             wordPositions.put(commonDocs.get(i), new ArrayList<>());
         }
-
         for (int i = 0; i < commonDocs.size(); i++) {
             for (int j = 0; j < words.length; j++) {
                 if (index.containsKey(words[j])) {
@@ -73,7 +68,7 @@ public class SearcherImpl implements Searcher {
             }
         }
 
-
+        //multiple nested loops to confirm the positions of each word.
         for (int i = 0; i < commonDocs.size(); i++) {
             List<List<Integer>> finalSet = new ArrayList<>();
             List<List<Integer>> wordPlaces = new ArrayList<>(wordPositions.get(commonDocs.get(i)));
@@ -93,7 +88,6 @@ public class SearcherImpl implements Searcher {
                 finalSet.add(intList);
             }
 
-
             Set<Integer> finalIntersection = new HashSet<>(finalSet.get(0));
             for (int p = 1; p < finalSet.size(); p++) {
                 Set<Integer> set = new HashSet<>(finalSet.get(p));
@@ -102,9 +96,7 @@ public class SearcherImpl implements Searcher {
                 }
                 finalIntersection.retainAll(set);
             }
-
             List<Integer> finalList = new ArrayList<>(finalIntersection);
-
             if (finalList.isEmpty()) {
                 continue;
             } else {
@@ -112,11 +104,6 @@ public class SearcherImpl implements Searcher {
             }
 
         }
-
-
         return result;
         }
-
-
-
 }
